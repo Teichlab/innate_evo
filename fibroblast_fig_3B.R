@@ -10,10 +10,6 @@ source("common_functions.R")
 gene_table = read.csv(file = "fibroblast_data/fibroblast_data.csv", row.names = 1, header = T)
 gene_table = gene_table[is.na(gene_table$divergence)==0,]
 gene_table = gene_table[gene_table$human_padj<0.01,]
-# 
-# gene_table = read.table("human_edgeR_PIC4-LF4_with_functionalSubsets1_expressionDeviation_FCorthos_dNdSbiomart_29M_enard_stringPPI_avgTPMunst_PPIs_promoters_ouch_name_orthos_clean_ISGs_DM_all_elements_new_BASiCs.txt", header = T, row.names = 1)
-# gene_table = gene_table[gene_table$V4<0.01,]
-# gene_table = gene_table[is.na(gene_table$constraint)==0,] 
 
 ##################################################################################
 ######################## Noise ###################################################
