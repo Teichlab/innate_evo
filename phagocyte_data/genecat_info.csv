@@ -1,0 +1,18 @@
+"class","prettyname","color"
+"a_all","All genes","#CCCCCC"
+"b_DE","dsRNA-responsive genes","#666666"
+"c_viral_sensors","Viral sensors","#84405C"
+"d_cytokines_and_receptors","Cytokines,
+ chemokines & receptors","#800080"
+"g_transcription_factors","Transcription factors","#008080"
+"h_chromatin_modulators_wide","Chromatin modulators","#33663E"
+"i_kinases_and_phosphatases","Kinases &
+phosphatases","#808000"
+"f_ligases_and_deubiquitinases","Ligases &
+de-ubiquitinases","#1166CC"
+"j_enzymes","Other
+enzymes","#D1950F"
+"l_self_defense","Cellular defense","#CC0000"
+"n_inflammation","Inflammation","#660000"
+"m_apoptosis","Apoptosis","#6600CC"
+"k_regulatory_g","Regulation","#4433CC"

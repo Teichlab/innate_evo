@@ -1,0 +1,41 @@
+class,prettyname,color,class_noletter
+a_all,All genes,#CCCCCC,all
+b_DE,dsRNA-responsive genes,#666666,DE
+c_viral_sensors,Viral sensors,#84405C,viral_sensors
+d_viral_sensors_DE,Viral sensors,#84405C,viral_sensors_DE
+e_cytokines,"Cytokines,
+ chemokines & receptors",#800080,cytokines
+f_cytokines_DE,"Cytokines,
+ chemokines & receptors",#800080,cytokines_DE
+g_cytokine_recpetors,"Cytokines,
+ chemokines & receptors",#800080,cytokine_recpetors
+g_cytokine_receptors,"Cytokines,
+ chemokines & receptors",#800080,cytokine_receptors
+g_cytokine_receptors_DE,"Cytokines,
+ chemokines & receptors",#800080,cytokine_receptors_DE
+h_cytokine_recpetors_DE,"Cytokines,
+ chemokines & receptors",#800080,cytokine_recpetors_DE
+i_transcription_factors,Transcription factors,#008080,transcription_factors
+j_transcription_factors_DE,Transcription factors,#008080,transcription_factors_DE
+k_remodeling,Chromatin modulators,#33663E,remodeling
+l_remodeling_DE,Chromatin modulators,#33663E,remodeling_D
+m_kinases,"Kinases &
+phosphatases",#808000,kinases
+n_kinases_DE,"Kinases &
+phosphatases",#808000,kinases_DE
+o_ligases,"Ligases &
+de-ubiquitinases",#1166CC,ligases
+p_ligases_DE,"Ligases &
+de-ubiquitinases",#1166CC,ligases_DE
+q_enzymes_non_regulatory,"Other
+enzymes",#D1950F,enzymes_non_regulatory
+r_enzymes_non_regulatory_DE,"Other
+enzymes",#D1950F,enzymes_non_regulatory_DE
+s_self_defense,Cellular defense,#CC0000,self_defense
+t_self_defense_DE,Cellular defense,#CC0000,self_defense_DE
+u_inflammation,Inflammation,#660000,inflammation
+v_inflammation_DE,Inflammation,#660000,inflammation_DE
+w_apoptosis,Apoptosis,#6600CC,apoptosis
+x_apoptosis_DE,Apoptosis,#6600CC,apoptosis_DE
+y_regulation_union,Regulation,#4433CC,regulation_union
+z_regulation_union_DE,Regulation,#4433CC,regulation_union_DE
