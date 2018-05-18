@@ -1,7 +1,26 @@
 Gene expression variability across cells and species shapes innate immunity
 ===========================================================================
 
+This directory contains data files and scripts related to our work: 
+"Gene expression variability across cells and species shapes innate immunity".
 
-Code for analyzing the data and producing the main figures for the paper 
-"Gene expression variability across cells and species shapes innate immunity"
-by T. Hagai et al.
+In this work, we have studied the relationship between transcriptional divergence
+between species in response to immune challenges and expression variability between
+individual cells.  We used two cross-species systems to study this: dermal fibroblasts
+and bone marrow-derived mononuclear phagocytes.
+
+We further study the relationship between these variability and divergence and other
+characteristics - including: 
+1. promoter architecture (presence or absence of elements such as CpG islands or TATA-boxes),
+2. gene functions, and 
+3. other evolutionary and cellular characteristics (such as coding sequence evolution, number of cellular interactions).
+
+The characteristics used are always related to one reference species: human - in the case of
+fibroblasts, and mouse - in the case of phagocytes. For example, when studying the relationship
+between cross-species divergence and promoter architecture, we use human and mouse promoters,
+for fibroblasts and phagocytes, respectively.
+
+The scripts in this directory allow reproducing the statistical analysis and main plots.
+We also provide a script detailing how we compute cell-to-cell variability using the DM method.
+Larger files and raw data (such as fastq files and count matrices) can be found in our
+FTP website and the relevant accessions in ArrayExpress (see manuscript for details).
