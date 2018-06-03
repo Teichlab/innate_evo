@@ -1,0 +1,7 @@
+sample	individual	treatment	timepoint
+x18957_34	3	LF	4
+x18957_35	3	PIC	4
+x18982_32	4	LF	4
+x18982_33	4	PIC	4
+x19368_25	5	LF	4
+x19368_26	5	PIC	4
