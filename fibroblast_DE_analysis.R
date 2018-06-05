@@ -16,11 +16,11 @@ library(lmtest)
 #########################################
 
 # count matrix
-countsMatrix<-read.table("fibroblast_data/rat_counts_pIC_ctrl.txt", header=T, row.names=1)
+countsMatrix<-read.table("fibroblast_data/bulk/rat_counts_pIC_ctrl.txt", header=T, row.names=1)
 countsMatrix<-round(countsMatrix) 
 
 # samples description
-info_table<-read.table("fibroblast_data/rat_samples_info.txt", header=T, row.names=1)
+info_table<-read.table("fibroblast_data/bulk/rat_samples_info.txt", header=T, row.names=1)
 
 info_table$treatment = factor(info_table$treatment, levels = c("LF", "PIC")) # reorganized to get UNST as the intercept; not alphabetiaclly
 
@@ -38,4 +38,20 @@ et <- exactTest(edgeR_DE_obj, pair=c("LF4","PIC4"))
 et$table$fdr <- p.adjust(et$table$PValue, "BH")
 
 
-write.table(et$table, file="output_figures/rat_edgeR_PIC_ctrl.txt")
+write.table(et$table, file="output_figures/rat_edgeR_PIC_ctrl_edger.txt")
+
+
+#########################################
+######## Use DESeq ######################
+#########################################
+
+
+dds_bulk = DESeq2::DESeqDataSetFromMatrix(countData = countsMatrix, 
+                                          colData = info_table,
+                                          design = ~treatment_and_time) 
+# Wald test (default in DESeq2)
+dds_bulk = DESeq2::DESeq(dds_bulk)
+result_bulk <- DESeq2::results(dds_bulk, contrast=c("treatment_and_time","LF4","PIC4"))
+result_bulk <- result_bulk[order(result_bulk$padj),]
+
+write.table(et$table, file="output_figures/rat_edgeR_PIC_ctrl_deseq.txt")
