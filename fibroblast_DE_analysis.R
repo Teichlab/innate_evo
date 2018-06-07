@@ -54,4 +54,4 @@ dds_bulk = DESeq2::DESeq(dds_bulk)
 result_bulk <- DESeq2::results(dds_bulk, contrast=c("treatment_and_time","LF4","PIC4"))
 result_bulk <- result_bulk[order(result_bulk$padj),]
 
-write.table(et$table, file="output_figures/rat_edgeR_PIC_ctrl_deseq.txt")
+write.table(result_bulk, file="output_figures/rat_edgeR_PIC_ctrl_deseq.txt")
