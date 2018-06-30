@@ -1,3 +1,10 @@
+
+# This script was originally written by JK Kim & JC Marioni, for:
+# Single Cell RNA-Sequencing of Pluripotent States Unlocks Modular Transcriptional Variation, Cell Stem Cell 17, 471-485, 2015.
+# Aleksandra A Kolodziejczyk, Jong Kyoung Kim, Jason CH Tsang, Tomislav Ilicic, Johan Henriksson, Kedar N Natarajan, Alex C Tuck, Xuefei Gao, Marc Bühler, Pentao Liu, John C Marioni, Sarah A Teichmann
+
+
+
 library(biomaRt)
 library(GenomicRanges)
 library(plyr)
