@@ -24,3 +24,7 @@ The scripts in this directory allow reproducing the statistical analysis and mai
 We also provide a script detailing how we compute cell-to-cell variability using the DM method.
 Larger files and raw data (such as fastq files and count matrices) can be found in our
 FTP website and the relevant accessions in ArrayExpress (see manuscript for details).
+
+Most groups were compared using empirical p-values. Similar results are obtained using the
+Mann-Whitney U test. The code can be changed to output the latter p-values by changing a
+flag in common_functions.R

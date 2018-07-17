@@ -73,7 +73,7 @@ dev.off()
 ##################################################################################
 
 
-empirical_p_value_cpg <- calc_empirical_p(
+empirical_p_value_tata <- calc_empirical_p(
   tata_genes$DM_pIC4,
   tata_less_genes$DM_pIC4
 )

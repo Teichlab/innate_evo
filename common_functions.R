@@ -59,26 +59,44 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 #####################################
 # Calculate empirical p-values
 calc_empirical_p <- function(larger_group_values, smaller_group_values) {
-  nboot=10000
-  small_group_size = length(smaller_group_values) 
-  large_group_size = length(larger_group_values) 
-  if(small_group_size>large_group_size){
-    calc_empirical_p(smaller_group_values, larger_group_values)
-  } else {
-    #subsample_larger_group_values = as.matrix(sample(larger_group_values, small_group_size, replace = FALSE))
-    total_p_value=0
-    for (i in 1:nboot) {
-      subsample_larger_group_values = sample(larger_group_values, small_group_size, replace = FALSE)
-      if (median(subsample_larger_group_values) > median(smaller_group_values)) {
-        total_p_value=total_p_value+1
+
+  ######### The test reported in the paper
+  if(TRUE){
+
+    nboot=10000
+    small_group_size = length(smaller_group_values) 
+    large_group_size = length(larger_group_values) 
+    if(small_group_size>large_group_size){
+      calc_empirical_p(smaller_group_values, larger_group_values)
+    } else {
+      #subsample_larger_group_values = as.matrix(sample(larger_group_values, small_group_size, replace = FALSE))
+      total_p_value=0
+      for (i in 1:nboot) {
+        subsample_larger_group_values = sample(larger_group_values, small_group_size, replace = FALSE)
+        if (median(subsample_larger_group_values) > median(smaller_group_values)) {
+          total_p_value=total_p_value+1
+        }
       }
+      total_p_value=total_p_value/nboot
+      min(total_p_value, 1-total_p_value)
     }
-    total_p_value=total_p_value/nboot
+
+  } else {
+    
+    # Alternative for calculating p-value using mann-whitney U test
+    v <- wilcox.test(larger_group_values, smaller_group_values,alternative="less",paired=FALSE)
+    total_p_value <- v$p.value
     min(total_p_value, 1-total_p_value)
+    
   }
 }
 
 
 
+
+
+
+#####################################
+### "not in"
 `%!in%` <- function(x,y) !(x %in% y)
 

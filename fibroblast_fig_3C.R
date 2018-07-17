@@ -87,7 +87,7 @@ plot_right <- ggplot(subset(gene_table, funct!="x_rest"), aes(x = DM_pIC4, fill 
 
 
 pdf(file="output_figures/fig_3C.pdf", useDingbats = F)
-cowplot::plot_grid(plot_top, NULL,
+  cowplot::plot_grid(plot_top, NULL,
                    plot_scatter, plot_right, nrow = 2, ncol = 2,
                    rel_heights = c(0.3, 1), rel_widths = c(1, 0.3),
                    align = "hv")
