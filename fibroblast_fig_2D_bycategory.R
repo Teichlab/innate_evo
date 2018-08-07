@@ -20,10 +20,13 @@ rownames(genecat_info) <- genecat_info$class
 ## Calculate p-values
 catsig <- c()
 for(n in genecatlist){
-  thep <- calc_empirical_p(
-    gene_table$divergence_all_simple[gene_table$class=="b_DE"],
-    gene_table$divergence_all_simple[gene_table$class==n]
-  )
+  if(n=="b_DE")
+    thep <- 0.5
+  else
+    thep <- calc_empirical_p(
+      gene_table$divergence_all_simple[gene_table$class=="b_DE"],
+      gene_table$divergence_all_simple[gene_table$class==n]
+    )
   thep<-p.adjust(thep, method = 'BH')
   catsig <- c(catsig, thep)
 }
@@ -99,13 +102,13 @@ dotheplot <- function(cats){
 barplot_gg <- dotheplot(c("a_all","b_DE","d_viral_sensors_DE","g_cytokine_receptors_DE",
                           "j_transcription_factors_DE","l_remodeling_DE","n_kinases_DE","p_ligases_DE",
                           "r_enzymes_non_regulatory_DE"))
-pdf(sprintf("fig_2D.pdf"),  width=6.0, height=3.5, useDingbats = FALSE)
+pdf(sprintf("output_figures/fig_2D.pdf"),  width=6.0, height=3.5, useDingbats = FALSE)
 print(barplot_gg)
 dev.off()
 
 barplot_gg <- dotheplot(c("a_all","t_self_defense_DE","v_inflammation_DE",
                           "x_apoptosis_DE","z_regulation_union_DE"))
-pdf(sprintf("fig_S4A.pdf"),  width=6.0, height=3.5, useDingbats = FALSE)
+pdf(sprintf("output_figures/fig_S4A.pdf"),  width=6.0, height=3.5, useDingbats = FALSE)
 print(barplot_gg)
 dev.off()
 

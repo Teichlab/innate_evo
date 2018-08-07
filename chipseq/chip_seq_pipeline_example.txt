@@ -1,0 +1,65 @@
+# raw and processed files mentioned in this pipeline are provided in ArrayExpress E-MTAB-5918
+
+#starting pipeline of chip seq dat:
+
+# trim the nextera sequences in the reads using trim_galore:
+/nfs/research2/teichmann/tools/trim_galore_zip/trim_galore --paired --quality 20 --length 20 -e 0.1 --adapter CTGTCTCTTATA --adapter2 CTGTCTCTTATA --trim1 HS3_0h_H3K4me3_R1.fastq HS3_0h_H3K4me3_R2.fastq
+
+# create indices of genome downloaded from UCSC (bowtie2 version 2.2.3; indices with soft masked genomes, excluding chromosome Y and alternative loci)
+/nfs/research2/teichmann/tools/bowtie2-2.2.3/bowtie2-build -f hg38_noY_noAlt.fa hg38_noY_noAlt
+
+# map the trimmed reads to the genome
+/nfs/research2/teichmann/tools/bowtie2-2.2.3/bowtie2 -p 12 -x hg38_noY_noAlt -1 HS3_0h_H3K4me3_R1_1_val_1.fq -2 HS3_0h_H3K4me3_R1_2_val_2.fq -S HS3_0h_H3K4me3.sam
+
+# remove unmapped and non-uniquely mapped reads and sort using samtools
+samtools view -ShuF 4 -f 2 -q 30 HS3_0h_H3K4me3.sam | samtools sort - -T tmp -o HS3_0h_H3K4me3_f2q30_sorted.bam
+
+# call peaks using MACS2:
+macs2 callpeak -t HS3_0h_H3K4me3_f2q30_sorted.bam -c HS5_CTRL -f BAMPE -g hs -q 0.01 -B --SPMR -n HS3_0h_H3K4me3"
+
+# merge peaks from 3 individuals per condition (overlap_individulas_and_merge_per_condition.sh is provided in this github folder)
+bash overlap_individulas_and_merge_per_condition.sh HS3_0h_H3K4me3_peaks.narrowPeak HS4_0h_H3K4me3_peaks.narrowPeak HS5_0h_H3K4me3_peaks.narrowPeak HS_H3K4me3_UNST_merged.bed3
+
+# merge conditions (per species)
+cat HS_H3K4me3_UNST_merged.bed3 HS_H3K4me3_pIC4_merged.bed3 | sort -k1,1 -k2,2n | mergeBed -i - > HS_H3K4me3_all_merged.bed3
+
+# name the merged peaks: 
+awk '{printf("%s\t%s\t%s\tHS_H3K4me3_all_merged_%s\n", $1,$2,$3,NR)}' HS_H3K4me3_all_merged.bed3 > HS_H3K4me3_all_merged.bed4
+
+# liftOver procedure to determine peak conservation (human-mouse example)
+
+# liftOver mouse to human  
+# we use -minMatch=0.8 for human/rhesus, and -minMatch=0.7 for human/rodents
+liftOver -minMatch=0.7 -multiple MM_H3K4me3_all_merged.bed4 mm10ToHg38.over.chain MM_H3K4me3_all_merged_0.7_hg38_allow_multi.bed unmapped
+
+# if the fifth column is more than 1, then it is a multi-mapping peak
+# to get the mouse peak names that have mm10-to-hg38 multi-mappers
+awk '$5>1' MM_H3K4me3_all_merged_0.7_hg38_allow_multi.bed | cut -f 4 | sort -u > Multi_mapping_mm10_to_hg38_with_mouse_names.names
+
+# get the mm10-to-gh38 multi-mapper coordinated (mouse peak names, hg38 coordinates)
+grep -w -f Multi_mapping_mm10_to_hg38_with_mouse_names.names MM_H3K4me3_all_merged_0.7_hg38_allow_multi.bed > Multi_mapping_mm10_to_hg38.bed
+
+# remove hg38 peaks (human peaks) that overlap with mm10-to-hg38 multi-mappers
+intersectBed -a HS_H3K4me3_all_merged.bed4 -b Multi_mapping_mm10_to_hg38.bed -v > HS_H3K4me3_all_merged_filtered_by_mm10.bed4
+
+# liftOver human to mouse
+liftOver -minMatch=0.7 -multiple HS_H3K4me3_all_merged.bed4 hg38ToMm10.over.chain HS_H3K27ac_all_merged_0.7_rn6_allow_multi.bed unmapped
+
+# get the human peak names that have hg38-to-mm10 multi-mappers
+awk '$5>1'  HS_H3K4me3_all_merged_0.7_mm10_allow_multi.bed | cut -f 4 | sort -u > Multi_mapping_hg38_to_mm10_with_human_names.names
+ 
+# exclude (-v) the human peaks (already filtered by mm10-to-hg38 multi-mappers) that have hg38-to-mm10 multi-mappers
+grep -w -v -f Multi_mapping_hg38_to_mm10_with_human_names.names  HS_H3K4me3_all_merged_filtered_by_mm10.bed4 >  HS_H3K4me3_all_merged_filtered_by_mm10_hg38.bed4
+
+
+# we now have two outputs:
+HS_H3K4me3_all_merged_filtered_by_mm10_hg38.bed4 has the human peaks which can be either uniquely mapped to mm10 or not mapped at all
+MM_H3K4me3_all_merged_filtered_by_hg38_mm10.bed4 has the mouse peaks which can be either uniquely mapped to hg38 or not mapped at all
+
+# perform the actual liftover - map human coordinates to mouse coordinates
+./liftOver -minMatch=0.7 HS_H3K4me3_all_merged_filtered_by_mm10_hg38.bed4 hg38ToMm10.over.chain HS_H3K4me3_all_merged_filtered_by_mm10_hg38_mapped_to_mm10.bed4 HS_H3K4me3_all_merged_filtered_by_mm10_hg38_unmapped_to_mm10.bed4
+
+# (D) check the uniquely mapped human to mouse mapped peaks whether they overlap with mouse peaks; if so - they are conserved in activity 
+intersectBed -a HS_H3K4me3_all_merged_filtered_by_mm10_hg38_mapped_to_mm10.bed4 -b MM_H3K4me3_all_merged_filtered_by_hg38_mm10.bed4 -f 0.5 -wo > HS_H3K4me3_all_merged_filtered_by_mm10_hg38_mapped_to_mm10_conserved_peaks_linkage.bed4
+intersectBed -a HS_H3K4me3_all_merged_filtered_by_mm10_hg38_mapped_to_mm10.bed4 -b MM_H3K4me3_all_merged_filtered_by_hg38_mm10.bed4 -f 0.5 -v > HS_H3K4me3_all_merged_filtered_by_mm10_hg38_mapped_to_mm10_unconserved_peaks.bed4
+

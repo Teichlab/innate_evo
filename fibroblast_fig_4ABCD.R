@@ -30,8 +30,15 @@ plots_gg <- list()
 p_dnds <- calc_empirical_p(
   gene_table$dNdS_29M[gene_table$divergence_group=="a_low_divergence"],
   gene_table$dNdS_29M[gene_table$divergence_group=="c_high_divergence"]
+  ,usetest="mw"
 )
 
+### sanity
+v <- wilcox.test(gene_table$dNdS_29M[gene_table$divergence_group=="a_low_divergence"],
+                 gene_table$dNdS_29M[gene_table$divergence_group=="c_high_divergence"]
+                 ,alternative="less",paired=FALSE)
+v$p.value
+### sanity
 
 plots_gg[["boxplot_dNdS"]] = 
   ggplot(gene_table[gene_table$divergence_group %in% c("a_low_divergence","b_middle_divergence","c_high_divergence"),], 
@@ -65,8 +72,19 @@ dev.off()
 
 p_ppi <- calc_empirical_p(
   log10(gene_table$cellular_PPIs[gene_table$divergence_group=="a_low_divergence"]),
-  log10(gene_table$cellular_PPIs[gene_table$divergence_group=="c_high_divergence"])
+  log10(gene_table$cellular_PPIs[gene_table$divergence_group=="c_high_divergence"]),
+  usetest="mw"
+  
 )
+
+
+### sanity
+v <- wilcox.test( log10(gene_table$cellular_PPIs[gene_table$divergence_group=="a_low_divergence"]),
+                 log10(gene_table$cellular_PPIs[gene_table$divergence_group=="c_high_divergence"])
+                 ,alternative="less",paired=FALSE)
+v$p.value
+### sanity
+
 
 plots_gg[["boxplot_PPIs"]] = 
   ggplot(gene_table[gene_table$divergence_group %in% c("a_low_divergence","b_middle_divergence","c_high_divergence"),],
@@ -103,6 +121,8 @@ dev.off()
 p_gainloss <- calc_empirical_p(
   -log10(0.0001+gene_table$gain_loss_rate_pval[gene_table$divergence_group=="a_low_divergence"]),
   -log10(0.0001+gene_table$gain_loss_rate_pval[gene_table$divergence_group=="c_high_divergence"])
+  ,usetest="mw"
+  
 )
 
 
@@ -139,9 +159,20 @@ dev.off()
 ##################################################################################
  
 p_age <- calc_empirical_p(
-  na.omit(gene_table$age_PTHR7_wagner[gene_table$divergence_group=="a_low_divergence"]),
-  na.omit(gene_table$age_PTHR7_wagner[gene_table$divergence_group=="c_high_divergence"])
+  gene_table$age_PTHR7_wagner[gene_table$divergence_group=="a_low_divergence"],
+  gene_table$age_PTHR7_wagner[gene_table$divergence_group=="c_high_divergence"]
+  ,usetest="mw"
+  
 )
+
+### sanity
+v <- wilcox.test(gene_table$age_PTHR7_wagner[gene_table$divergence_group=="a_low_divergence"],
+                  gene_table$age_PTHR7_wagner[gene_table$divergence_group=="c_high_divergence"]
+                  ,alternative="greater",paired=FALSE)
+v$p.value
+p_age
+
+### sanity
 
 
 plots_gg[["boxplot_Age"]] = 

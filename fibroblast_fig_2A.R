@@ -35,9 +35,14 @@ gene_table_with_peaks[gene_table_with_peaks$divergence>divq3,]$class = "c_high"
 ##############################################################
 ########################### stats ############################
 ##############################################################
+mw_p_value <- calc_empirical_p(
+  gene_table_with_peaks$TFBM_density[gene_table_with_peaks$class=="a_low"],
+  gene_table_with_peaks$TFBM_density[gene_table_with_peaks$class=="c_high"], 
+  usetest="mw"
+)
 
 
-empirical_p_value <- calc_empirical_p(
+permut_p_value <- calc_empirical_p(
   gene_table_with_peaks$TFBM_density[gene_table_with_peaks$class=="a_low"],
   gene_table_with_peaks$TFBM_density[gene_table_with_peaks$class=="c_high"]
 )
@@ -58,7 +63,7 @@ p <- ggplot(gene_table_with_peaks[gene_table_with_peaks$class%in%c("a_low","b_me
   geom_violin()+
   coord_cartesian(ylim = c(0.0, 0.5)) +
   scale_fill_manual(values=c("#6699DD", "#9966CC", "#CC6677")) +
-  geom_signif(comparisons=list(c("a_low","c_high")), annotations=formatSignificance(empirical_p_value),
+  geom_signif(comparisons=list(c("a_low","c_high")), annotations=formatSignificance(mw_p_value),
               y_position = 0.45, tip_length = 0, vjust=0.4) +
   labs(x="Response divergence",
        y="TFBM density")  +

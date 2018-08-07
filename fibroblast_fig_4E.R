@@ -24,12 +24,12 @@ gene_table[gene_table$viral_immunomodulators_PPI>0,]$viral_class = "c"
 
 pval_ab <- calc_empirical_p(
   gene_table$divergence[gene_table$viral_class=="a"],
-  gene_table$divergence[gene_table$viral_class=="b"]
+  gene_table$divergence[gene_table$viral_class=="b"],usetest="mw"
 )
 
 pval_bc <- calc_empirical_p(
   gene_table$divergence[gene_table$viral_class=="b"],
-  gene_table$divergence[gene_table$viral_class=="c"]
+  gene_table$divergence[gene_table$viral_class=="c"],usetest="mw"
 )
 
 

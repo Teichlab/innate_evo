@@ -3,6 +3,8 @@ library(psych)
 library(ggplot2)
 library(ggsignif)
 
+source("common_functions.R")
+
 gene_table = read.csv(file = "phagocyte_data/phagocytes_summary_data.csv", row.names = 1, header = T)
 
 # gene_table$divergence <- log(1/3 * (
