@@ -20,11 +20,12 @@ fibroblasts, and mouse - in the case of phagocytes. For example, when studying t
 between cross-species divergence and promoter architecture, we use human and mouse promoters,
 for fibroblasts and phagocytes, respectively.
 
-The scripts in this directory allow reproducing the statistical analysis and main plots.
-We also provide a script detailing how we compute cell-to-cell variability using the DM method.
+The scripts in this directory allow reproducing the statistical analysis and main plots. 
+We also provide a script detailing how we compute cell-to-cell variability using the DM method, 
+and pipelines for the fibroblast ChIP-seq and phagocyte single-cell analyses.
 Larger files and raw data (such as fastq files and count matrices) can be found in our
 FTP website and the relevant accessions in ArrayExpress (see manuscript for details).
 
-Most groups were compared using empirical p-values. Similar results are obtained using either
-the Mann-Whitney U test or an alternative bootstrap method. The code can be changed to output
-p-values by any method by changing a flag in common_functions.R
+Most groups were compared using Mann-Whitney test. Similar results are obtained using alternative
+tests. The code can be changed to output p-values computed using different methods by changing
+a flag in common_functions.R
