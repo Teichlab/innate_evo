@@ -9,12 +9,7 @@ library(sqldf)
 
 
 
-## DOUBLE-CHECKED LPS4,UNST IN RABBIT1-3: THERE IS ONE MISTKAE IN RABBIT2_UNST WHERE I USED THE WRONG UPPER THRESHOLD OF 1,134 INSTEAD OF 1,374 
-## INSTEAD OF 3,708 CELLS I INCLUDED 3,109
-# Feb 2018
-# read in rabbits 10X data, and writes UMI matrixes, filtered for bad cells, for later 1-to-1 ortho anlysis 
-
-# function to read 10X data and creating R-object with ENSEMBL IDs instead of Seurat's gene names
+# Function to read 10X data and create an R-object with ENSEMBL IDs 
 Read10XbyENSEMBLid <- function(data.dir = NULL){
   full.data <- list()
   for (i in seq_along(data.dir)) {
@@ -118,14 +113,6 @@ metadata_unst = data.frame(row.names = colnames(unst_matrix_coding_filtered),
 
 # (2) remove cells by high fraction of MT or by low number of UMI
 
-# we use MT<10; 200<n_genes<5,000
-
-# filter 
-#AS A RULE: 
-# we take cells with AT LEAST 200 GENES; and NO MORE than 90% of the total number of expressed genes
-# we take MT<=10%
-# less than 90% of the genes - which is 1,383 in this case
-# above 200 genes 
 good_cells = rownames(metadata_unst[metadata_unst$p_mt<=10 &
                                       metadata_unst$n_genes<=quantile(metadata_unst$n_genes, 9/10) &
                                       metadata_unst$n_genes>=200,
@@ -170,7 +157,7 @@ metadata_merged = data.frame(row.names = colnames(merged_table_rabbit),
                                               rep("rabbit3",ncol(unst_matrix_filtered_cleaned_rabbit3)))
 )
 
-# remove cells that don't have at least 500/1,000 genes or that their MTs are too high (>10%)
+# remove cells that don't have a minimum number of genes or that their MT fraction is too high (>10%)
 quant10 = quantile(metadata_merged$n_genes, c(1,9)/10)
 quant10 = as.numeric(quant10[1])
 
@@ -179,7 +166,7 @@ good_cells1 = rownames(metadata_merged[metadata_merged$p_mt<=10 & metadata_merge
 metadata_merged_filtered1 = metadata_merged[good_cells1,]
 rabbit_merged_filtered1 = merged_table_rabbit[,good_cells1]
 
-# normalize data for PCA,tSNE and clusters
+# normalize data
 merged_table_norm1 = limma::removeBatchEffect(log2(rabbit_merged_filtered1+1), 
                                               batch = metadata_merged_filtered1$individual,
                                               covariates = metadata_merged_filtered1$total_reads)
@@ -189,7 +176,7 @@ merged_table_obj = CreateSeuratObject(merged_table_norm1, project = "merged")
 merged_table_obj@scale.data = merged_table_obj@data
 merged_table_obj = FindVariableGenes(merged_table_obj)
 
-# run PCA on ALL (filtered) genes 
+# run PCA
 merged_table_obj = RunPCA(merged_table_obj, pc.genes = row.names(merged_table_obj@data))
 
 # find clusters, based on 20 PCs and with a resolution of 0.1
@@ -234,7 +221,7 @@ rabbit2_lps4 = read.table(file = "rabbit2_lps4_filtered_by_cell_cluster0.txt", r
 rabbit3_lps4 = read.table(file = "rabbit3_lps4_filtered_by_cell_cluster0.txt", row.names = 1, header = T)
 
 
-# these input files should include only high-quality cells - from specific clusters that are analogous to other cross-conditions and species, with coding genes 
+# these input files should include only high-quality cells - from specific clusters that are analogous across conditions
 
 # merge data and create metadata 
 all_merged = Reduce(mergeAndFormat, list(rabbit1_unst, rabbit2_unst,rabbit3_unst, 

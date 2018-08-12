@@ -59,7 +59,7 @@ MM_H3K4me3_all_merged_filtered_by_hg38_mm10.bed4 has the mouse peaks which can b
 # perform the actual liftover - map human coordinates to mouse coordinates
 ./liftOver -minMatch=0.7 HS_H3K4me3_all_merged_filtered_by_mm10_hg38.bed4 hg38ToMm10.over.chain HS_H3K4me3_all_merged_filtered_by_mm10_hg38_mapped_to_mm10.bed4 HS_H3K4me3_all_merged_filtered_by_mm10_hg38_unmapped_to_mm10.bed4
 
-# (D) check the uniquely mapped human to mouse mapped peaks whether they overlap with mouse peaks; if so - they are conserved in activity 
+# check whether filtered human-to-mouse peaks overlap with mouse peaks; if so - they are conserved in activity 
 intersectBed -a HS_H3K4me3_all_merged_filtered_by_mm10_hg38_mapped_to_mm10.bed4 -b MM_H3K4me3_all_merged_filtered_by_hg38_mm10.bed4 -f 0.5 -wo > HS_H3K4me3_all_merged_filtered_by_mm10_hg38_mapped_to_mm10_conserved_peaks_linkage.bed4
 intersectBed -a HS_H3K4me3_all_merged_filtered_by_mm10_hg38_mapped_to_mm10.bed4 -b MM_H3K4me3_all_merged_filtered_by_hg38_mm10.bed4 -f 0.5 -v > HS_H3K4me3_all_merged_filtered_by_mm10_hg38_mapped_to_mm10_unconserved_peaks.bed4
 
